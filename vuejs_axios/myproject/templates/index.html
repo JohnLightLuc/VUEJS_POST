@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="container" id="myapp">
+        <h1>Image uploading with vuej</h1>
+                <di>
+                    <p>name = ${ name }</p>
+                    <p>email = ${ email }</p>
+                    <p>passwword = ${ password }</p>
+                    <p>File = ${ file }</p>
+                </di>
+        
+                <div class="form-group">
+                        <label for="exampleInputName1">Full name</label>
+                        <input type="text" v-model="name" class="form-control" id="exampleInputName1"  placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Email address</label>
+                    <input v-model="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input v-model="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                </div>
+                <div class="form-group">
+                <label for="file">Example file input</label>
+                <input type="file"  id="file" ref="file" v-on:change="handleFileUpload()" />
+                </div>
+                <button v-on:click="submitFile()" class="btn btn-primary">Submit</button>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+         new Vue({
+                  el: '#myapp',
+                  data: {
+                      name: '',
+                      email: '',
+                      password: '',
+                      file : '',
+                      isregister: false,
+                      codesend:false,
+                      result: {'succes': false,'reponse':'' },
+                     
+                  },
+                  delimiters: ["${", "}"],
+                  methods: {
+
+                    handleFileUpload: function () {
+                        this.file = this.$refs.file.files[0];
+                        
+                    },
+                    submitFile: function () {
+                        let formData = new FormData();
+                        formData.append('file', this.file);
+                        formData.append('name', this.name);
+                        formData.append('email', this.email);
+                        formData.append('paswword', this.password);
+                        console.log(formData)
+                        axios.defaults.xsrfCookieName = 'csrftoken'
+                        axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+                        axios.post('http://127.0.0.1:8000/inscription/',
+                            formData,
+                        
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }
+                        ).then(function(){
+                            console.log(reponse.data);
+                            console.log('SUCCESS!!');
+                        })
+                        .catch(function(){
+                            console.log('FAILURE!!');
+                        });
+                    },
+
+
+                    
+                }
+              })
+    </script>
+  </body>
+</html>
