@@ -87,6 +87,57 @@ Pas trop compliquer que ça enfin, allons-y !
 								
   
   
+## Enregistrer une image
+
+### html
+	<input v-on:change="handleFileUploaded" ref="file" type="file" style="font-size: 11px;">
+
+### Js 
+	 methods: {
+		 handleFileUploaded (){
+		     this.file = this.$refs.file.files[0];
+
+		 },
+		 senddata(){
+		     let formData = new FormData();
+                     formData.append('file', this.file);
+		     axios.defaults.xsrfCookieName = 'csrftoken'
+	             axios.defaults.xsrfHeaderName = 'X-CSRFToken' 
+		     axios.post(
+		     	this.base_url + 'url_path', 
+			formData, 
+			{
+			    headers: {
+				'Content-Type': 'multipart/form-data',
+			    }
+			 }).then(response => {
+			  	console.log(response)
+			 }).catch((err) => {
+                                console.log(err);
+                         })
+		  },
+	}
+	  
+### views.py
+
+	def save(request):
+	   try:
+	      image = request.FILES['file']
+	      myProfil = model.profile()
+	      myProfil.image = image
+	      myProfil.save()
+	      'statut' = True
+	      'message' = "Bien enregistré !" 
+	    except:
+	    	'statut' = False
+	      	'message' = "Problème d'enregistrement !" 
+	    
+	    data = {
+              'statut': statut,
+              "message":message,
+   	     }
+
+    	    return JsonResponse(data, safe=False)
 
     
 
