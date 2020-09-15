@@ -110,11 +110,12 @@ Pas trop compliquer que ça enfin, allons-y !
 			    headers: {
 				'Content-Type': 'multipart/form-data',
 			    }
-			 }).then(response => {
-			  	console.log(response)
-			 }).catch((err) => {
-                                console.log(err);
-                         })
+			 }
+		      ).then(response => {
+			  console.log(response)
+		      }).catch((err) => {
+                          console.log(err);
+                      })
 		  },
 	}
 	  
